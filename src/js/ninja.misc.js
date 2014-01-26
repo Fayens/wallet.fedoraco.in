@@ -22,7 +22,7 @@ ninja.seeder = {
 			ninja.wallets.singlewallet.open();
 			// UI
 			document.getElementById("generate").style.display = "none";
-			document.getElementById("menu").style.visibility = "visible";
+			$(".nav li").show();
 		}
 		if (SecureRandom.poolCopyOnInit != null) {
 			document.getElementById("seedpool").innerHTML = Crypto.util.bytesToHex(SecureRandom.poolCopyOnInit);
@@ -138,13 +138,13 @@ ninja.qrCode = {
 };
 
 ninja.tabSwitch = function (walletTab) {
-	if (walletTab.className.indexOf("selected") == -1) {
+	if (walletTab.className.indexOf("active") == -1) {
 		// unselect all tabs
 		for (var wType in ninja.wallets) {
 			document.getElementById(wType).className = "tab";
 			ninja.wallets[wType].close();
 		}
-		walletTab.className += " selected";
+		walletTab.className += " active";
 		ninja.wallets[walletTab.getAttribute("id")].open();
 	}
 };

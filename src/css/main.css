@@ -3,8 +3,8 @@
 .less { background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDEvMDIvMTLltnQyAAABuklEQVQ4ja2US25TQRBFT336OSEY5ESyBfEakNiLt0AW5S2QvQQxAiZIYBwSz/yByH7dxcB2bPMME+hJS/W5fetWVUtE8K/HfzdcXfdfqsr4onuGuRz4Jrdzcg6Gg9HfQYAxAqmlSMMlQJO5/oliE4AtQLcR++btZQ+wPVsvVXbTfXFGEMyWU9rVM0yMu/Gc5bJ+DdztxWcH3otKVzbPmyq5LnwfzSgEBMxlhqJEBFWVKKUgG66rur53oH7aOeWkUlJSRCBHZracssorlLXttHpCpzonaYukjmsiivDu08daAZIJ7oLIVg9BUQgQUVwSua5Z5AWmiqnj6pisVXAAU0F1J6WK0q6e024Fs4cplbXonFxgapisk00MkdiBqDd7oSKoOiqGmZHMSZrwPRYHIMfaKaKsyhI01oni6IaFYptSyiOIT27nOwaq5FyQrUAIC/nBhK+UErRSos55z4878CrneJyTnHOvquymf3mOb+hvy/jw+QuLh5/NORkORvsGrq77dc6xpr0RcH07y3oF8G04GN0f6HdEDhdA1XG1vXb6dsAa+3Z8AREiQwkoEeQoiBzocHDkf/wnvwC5IpRVsUDNUgAAAABJRU5ErkJggg==)
 			no-repeat left center; width: 17px; height: 17px; display: inline-block; float: right; }
 .right { text-align: right; }
-.walletarea { display: none; border: 2px solid green; }
-hr { margin: 20px 0; border-top: 2px dashed #008000; }
+.walletarea { display: none; }
+hr { margin: 20px 0; border-top: 2px dashed #FA940E; }
 .keyarea { height: 110px; text-align: left; position: relative; padding: 5px; }
 .keyarea .public { float: left; }
 .keyarea .pubaddress { display: inline-block; height: 40px; padding: 0 0 0 10px; float: left; }
@@ -20,7 +20,7 @@ body { font-family: Arial; }
 .question { padding: 10px 15px; text-align: left; cursor: pointer; }
 .question:hover, .expandable:hover { color: #77777A; }
 .answer { padding: 0 15px 10px 25px; text-align: left; display: none; font-size: 80%; }
-.faq { border: 0; border-top: 2px solid green; }
+.faq { border: 0; }
 
 #btcaddress, #btcprivwif, #detailaddress, #detailaddresscomp, #detailprivwif, #detailprivwifcomp { font-family: monospace; font-size: 1.25em; }
 #seedpoolarea { display: none; }
@@ -35,16 +35,29 @@ body { font-family: Arial; }
 #singlearea { font-size: 90%; }
 #singlesecret { position: relative; top: -130px; float: right; right: 200px; color: red; font-weight: bolder; font-size: 200%;  }
 #singleshare { position: relative; top: -110px; float: left; left: 160px; color: green; font-weight: bolder; font-size: 200%;  }
-#singlesafety { text-align: left; padding: 5px; border-top: 2px solid green; top: -25px; position: relative; }
+#singlesafety { text-align: left; padding: 5px; top: -25px; position: relative; }
 
-#main { position: relative; text-align: center; margin: 0px auto; width: 1005px; }
+#main { position: relative; margin: 0px auto; width: 100%; }
 #logo { width: 578px; height: 80px; }
-#generate { font-family: monospace; font-size: 1.25em; height: 158px; text-align: left; position: relative; padding: 5px; border: 2px solid green; }
+#generate {
+	font-family: monospace;
+	font-size: 1.25em;
+	height: 158px;
+	text-align: left;
+	position: relative;
+	padding: 5px;
+	margin-top: 100px;
+}
 #generate span { padding: 5px 5px 0 5px; }
-		
+
+#wallets{
+	margin-top: 100px;
+}
+
 #paperarea { min-height: 120px; display: none; }
-#paperarea .keyarea { border: 2px solid green; border-top: 0; }
-#paperarea .keyarea.art { display: block; height: auto; border: 0; font-family: Ubuntu, Arial; padding: 0; margin: 0; }
+#paperkeyarea { text-align: center; }
+#paperarea .keyarea { border:0; }
+#paperarea .keyarea.art { display: block; height: auto; border: 0; font-family: Ubuntu, Arial; padding: 0; display: inline-block; margin: 10px; }
 #paperarea .artwallet .papersvg { width: 486px; height: 261px; border: 0; margin: 0; padding: 0; left: 0; }
 #paperarea .artwallet .qrcode_public { top: 52px; left: 17px; z-index: 100; margin: 0; float: none; display: block; position: absolute; background-color: #FFFFFF; 
 		                                padding: 5px 5px 2px 5px; } 
@@ -107,9 +120,9 @@ body { font-family: Arial; }
 #vanityarea .label { text-decoration: underline; }
 #vanityarea .output { font-family: monospace; font-size: 1.25em; display: block; }
 #vanityarea .notes { text-align: left; font-size: 80%; padding: 0 0 20px 0; }
-#vanitystep1area { display: none; text-align: left; position: relative; padding: 15px; border-bottom: 2px solid green; }
+#vanitystep1area { display: none; text-align: left; position: relative; padding: 15px; }
 #vanitystep1label { padding-left: 5px; }
-#vanitystep2area { border-top: 2px solid green; display: block; padding: 15px; }
+#vanitystep2area { display: block; padding: 15px; }
 #vanitystep2inputs { padding: 0 15px 10px 15px; }
 #vanitycalc { margin-top: 5px; }
 		
@@ -137,9 +150,10 @@ body { font-family: Arial; }
 	.menu .tab.selected { background-color: #FFF; border-bottom: 2px solid #FFF; cursor: default; }
 	.menu .tab.selected:hover { color: #000; }
 	.pagebreak { height: 50px; }
-	.commands { border-bottom: 2px solid green;  padding: 10px 2px; margin-bottom: 0; }
+	.commands { padding: 10px 2px; margin-bottom: 0; }
 	.commands .row { padding: 0 0; text-align: left; } 
 	.commands .row.extra { padding-top: 6px; }
+	.commands form.extra { padding-top: 10px; }
 	.commands span { padding: 0 10px; }
 	.commands span.print { float: right; }
 	.commands span.right { float: right; }
@@ -159,8 +173,9 @@ body { font-family: Arial; }
 	#detailcommands span { padding: 0 10px; }
 	#detailprivkey { width: 250px; }
 	#detailprivkeypassphrase { width: 250px; }
-	.paper .commands { border: 2px solid green; }
+	.paper .commands { border: 0; }
 	#bulkstartindex, #paperlimit, #paperlimitperpage { width: 35px; } 
+	#paperpassphrase { width: 200px; }
 	#bulklimit { width: 45px; }
 			
 	.footer { font-size: 90%; clear: both; width: 750px; padding: 10px 0 10px 0; margin: 50px auto auto auto; }
@@ -178,7 +193,7 @@ body { font-family: Arial; }
 	#main { width: auto; }
 	#singlearea { border: 0; }
 	#singlesafety { border: 0; }
-	#paperarea .keyarea:first-child { border-top: 2px solid green; }
+	#paperarea .keyarea:first-child { border: 0; }
 	#paperarea .keyarea.art:first-child { border: 0; }
 	.pagebreak { height: 1px; }
 	.paper #logo { display: none; }

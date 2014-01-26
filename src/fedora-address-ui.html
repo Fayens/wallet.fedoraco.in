@@ -1,0 +1,499 @@
+<!doctype html>
+<html>
+<head>
+	<!--
+	Donation Address: 1NiNja1bUmhSoTXozBRBEtR8LeF9TGbZBN
+
+	Notice of Copyrights and Licenses:
+	***********************************
+	The bitaddress.org project, software and embedded resources are copyright bitaddress.org (pointbiz). 
+	The bitaddress.org name and logo are not part of the open source license.
+
+	Portions of the all-in-one HTML document contain JavaScript codes that are the copyrights of others. 
+	The individual copyrights are included throughout the document along with their licenses.
+	Included JavaScript libraries are separated with HTML script tags.
+
+	Summary of JavaScript functions with a redistributable license:
+	JavaScript function		License
+	*******************		***************
+	Array.prototype.map		Public Domain
+	window.Crypto			BSD License
+	window.SecureRandom		BSD License
+	window.EllipticCurve		BSD License
+	window.BigInteger		BSD License
+	window.QRCode			MIT License
+	window.Fedoracoin			MIT License
+	window.Crypto_scrypt		MIT License
+
+	The bitaddress.org software is available under The MIT License (MIT)
+	Copyright (c) 2011-2013 bitaddress.org (pointbiz)
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+	associated documentation files (the "Software"), to deal in the Software without restriction, including 
+	without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
+	sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject 
+	to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all copies or substantial 
+	portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+	LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+	WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	GitHub Repository: https://github.com/pointbiz/bitaddress.org
+	-->
+
+	<title>FedoraCoin Wallet Generator</title>
+	<meta charset="utf-8">
+
+	<script type="text/javascript">
+//array.map.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.js	
+	</script>
+	<script type="text/javascript">
+//cryptojs.sha256.js	
+	</script>
+	<script type="text/javascript">
+//cryptojs.pbkdf2.js 
+	</script>
+	<script type="text/javascript">
+//cryptojs.hmac.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.aes.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.blockmodes.js
+	</script>
+	<script type="text/javascript">
+//cryptojs.ripemd160.js
+	</script>
+	<script type="text/javascript">
+//securerandom.js
+	</script>
+	<script type="text/javascript">
+//ellipticcurve.js
+	</script>
+	<script type="text/javascript">
+//biginteger.js
+	</script>
+	<script type="text/javascript">
+//qrcode.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.base58.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.address.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.ecdsa.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.eckey.js
+	</script>
+	<script type="text/javascript">
+//bitcoinjs-lib.util.js
+	</script>
+	<script type="text/javascript">
+//crypto-scrypt.js
+	</script>
+	<style type="text/css">
+//bootstrap.min.css
+	</style>
+	<style type="text/css">
+//nav.css
+	</style>
+	<style type="text/css">
+//main.css
+	</style>
+</head>
+<body onclick="SecureRandom.seedTime();" onkeypress="SecureRandom.seedTime();" onmousemove="ninja.seeder.seed(event);">
+	<div id="busyblock"></div>
+	<div id="main">
+	
+		<div id="navbar-header" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAABIpAAASKQFhYydIAAAAB3RJTUUH3QwXDikMLSTZvAAACulJREFUaN61mnuQnWV9xz/f933P2T3nbEICBMJF4kC4FIJQahyZ1rEtjPWPitUMXtpq/qBOtaXO1AbCXsAQkt1sQLRaOnV0hulgLw6jk0GqhbEGHIciURBZKCKiAYxc0pBkd89lz3mfb/9437OX3Pacs/SZ2dnZnT3P8/zu3+/3WdHj8p2gz8z9HO4kqteoqEA/KWcbziNwisUAIpKZljnYivlFIeXFVkQ1hunSIK3ZPQ0I1MN9xBJX7XMsY4arba4ErgAuQhTt/AABBucnKbtsanhB5nHED4P57sAQryzlHj0bMrmTtUmTv7D4ADBgSIAAhAVe9cJT5nldNrFEalOXeFiBfygN82OA/V+EUz/9/2SIb4d6i+UWt2I2GMpALb8UUteOaQfOmGJmHd9rFrmx9DovF8dxpxtFi6bOtux7upOk3uTjNj924GM2iaCubA/1YEQ78yQTSTRlWoarCk0ebZ3E5vRzVACq25YYkakxGBiE6lZWUGAcc43BEiHPGnV0+7n0cjsM+Qd1jL8EI0QB2OMWn67czC+qY1AeXEJqTY2xNjJfM1yImO6lqbhtdfa9QESwCW2HHPMexoaixKTNdZUhHuo6teo787Qa5eLI/JvFWyWm5S5ryrN2xMBvEH9UCFyI2SS411B0u0KOdrEkZgwl4CvVUa4CmB7tMCLVbVAegfrtrA4t7gPWYJpWh2m0MJuCzUmCx1Jz/bJhnl1w1ii7DO+SqB03O7LIJBL1EPjwwDA/rI9C/1AHqTW9leUU+J7MOYiZDlLQOB8RC2thQLCr2cdfn/R3TOeXH0U8XB7kgcntvD0Wj1i8tkjK2iYCmjFc0z/Ek4tGxDuIq+bLMu9DNBc1wllpGoKg4LwWnLXSpzA3JCWeDw2i1HxV4g9tbv/1K+w893SWNcSDEm8F0kXCa0Ms8yRFPlrexBsnrJG6eb/Me92JEfmFbVYK7hB8ROJuw4TgMOKdiG836/xnCt8W/B5mRubta04mSoY5DPzXvH51ogKQIDX8Ng2ua9yCwt8fJyK17QxYPGRxtk7koSO8ZRgowrrCEC8BeBPUV7A2RKwTXIV4r+EMYCrft4F50BH3KaVkGFdEf4cDWjZRnHBZ/4282v5l0u4ElSGwuMHiApnDdDjgrCzcaXMu1LoDgOfzr10AjVHeFswGi/XAWYgNSrkW0QJSnEGbDvwWBIU05R7gPXPW3QLaCtNjrAEekXOM16kh2WSeBB6W+D4p95VGOHyiz1S3c74i1ti8A3gnsBZxNuYQOjHayIepMUXDxsoQ36ndPi+U1VG2A9cBLbqBG8Z5axbmZQWuLY2w14aZUVYX6xzUbdSPadAoSpoolDgjbbFRYjMw2WGXjBG742Vs7LuepgCmRjlFZpcizssRbC/gT4JHy4NsAKiOE5MyZLg+gqfIBuBjMvtaKa8tuyUr79e/Aqs+Af4Shdok37G4VMxxlEVa8jSB91VGeC4BiMQ64C3OjegJg4hE8BjAPkO0hb7QzyVACHApZj2mhnghSXi2Nsrj9PHPpU8wCZC2KNBpg5lrVQOKuRJ4LgJQ4AqgX/QIpDLyNJBE/CvAmQIVOJnA+RjLNBGTEilijbMutjM0effsnQ7Th7gCd2aMneM2eEdtB0k0M06RiLchhHuA4sI2sczLhc281NiRHxSxmojz8l2zGtJsSgREXPl37m9v0yzyu5iTmAOSi+F/5d3ucptK0kopA5dYBPXCKLKILJf4AkDfTTmHF1fZJNKRHDEDhJj91Q+zQx/ip5HYnZrrDIfVlQ8Jhksw/YlEnzNg2OqR9QujpMU3AbwdNAzAx4Gp45CpNuPdaHBqqhZ9gobdRZFmbbhPMWdFjRZlYEXuue4DkrG7Z9zHfsiMSLdzus0FQGpnx2XjafaMjFGaFBEQ/TnT7J4uiyYtLo2KMacZQm9mACLGPOGZOe83ItYI7he8KggWy2X6c2vaBjmvmp56zLwVgFWJxUqZ4N6onwVNw1ONAq2wBaItIPEjAn+WxqxIxIVpymWGqyX+IJeGpgTNpUpROSkLRKxM2uxMvUUDAtVITJT/FOuc7NelmwhANf/aB+wGvjD9GYpaxfsFfw5cjkmWEos2XcCkiRIOOSWSe7JGiAMWe9tG1Mc417A6CjxfFP+robm5ULmTGeDe2jjfcsp/WFy0ZIUQIsGhxCn7ZKKuU2tOPdzX7OdXAOkoasAGzCdTcbBmnqmOMoHYXR7Mpj6AA5flc9NLqg/nNQqvJjYN4I2uS0RYJrZ4dsXfZl6fgX4Cl1r0I1YLzgTeY/M31VFqwHfjwD3BnG9RXnIsMhaahISnk0g0gL0256jDqTovIiUFvjFv45WGtRLKp3cKpNl5VIAPtSI2IuqYKkJLTC1Z1GmxL0rMNGYib6PdoN1IUC0P86PZXVNOE5w7j8/MtlZBUAYaD8iZzKqld61IZkJQi4pDNBE/VTac3HFqigqBe49QydYjBo7DwLUAcy29yi2ILZ5wwnSbjT2Rh7ubVYrhnpx7tPHVtc68vQjFf3OWM96yp3IjaQTQMhM2LyKiY6p+R9dYbPhVkvJzgPJmmB5nueHdEo1j7uBZZtefT+MlGWSDzKHYPDorBy0f4oDE93P6uOgRNgmwJ2QKIQDlc6lG8Aqmrw3nPA9dOYP7RUX8wJkx0bzouOtgiBixR6fwS4DIX8/TIvBloI6RF89fybxeuJmZ6ij4LtC1tEqDrCHw+4IvCR4Efm447CwSKwTPlm/iTwRvAT4lOGgTu6fxQaTAv/T9Ja3aHXnJTY3CwBBUx9hks1XiwAnL0USG1xCfqgzyyDH/5DbiaszpkTgTczGwPsCuylAuyGXiw8uGKG/76iKryjIPlYf44DEFuukdVBR4IJdn0kWcEmEaFi/JfC0J3F0cOT4Q9BEHVnfyLre4T2K6hx4WAxeVBzl4XO23toNrQuAuLd4knWtakUUFKAt+IPMtIn7ilL0h8Oqh3zB11j/O1cD/bIbfGofpMT4v85HcYeownzIZyOyI4Iv9w3P7HrXBzD1ErZe4y+KDgqaNpEWPIBevi0AfYtrmFcGLwATm6Qj29A/zPEBjjJNb5n6JNV01KhPJPGH4aGV4oQh4vDcJqmM8ZThVHXrMRz+dIc+CwgzWiymbn0lcgFndxZuLc81XxcCVhRH2Lvpi9dqO7OjSJOsFv85bbSezBbUfNzWLS9rajBADmDMQVwNndvGPAbaJbeqx+ePCCHsbwx2+IbaZ3vR2LkDcjVgraM6S0yWh7qPqfrGPRA4ckvir8hC7Wz+B5PJeHkO3s0zivwWndfh69ebAj4xGRxZR1OLq0s1MHKnPLvoYOmvENhgYZrIyxDrDA7kKGNkLFJE38fb5vp4Fl88kDS4u3cxEbdtCPamjV932GhgBb8lnTMxGwaDNcxKnZlDnTTXG7dcvizeA8b4BrunbwoH6bVAaWbxGF13tyR+2QlOsaCV8DHMrMJN3tW7y/ugYZERMggHEV+OUsVYf+ys3dO6o7mj6FlAeocYYqwKMB7NOcCpQtEgwzsU+5w+lzJszs8pkDk1SmyZwQBEvxPDZvpt4GsCfBd3anaLS9aqPQX/+7xTVMc62+Z1IXG5zEeI8m9MlVhkKMmmuN8X5u/t+sufoX2J+ZvEk8HhlkOcApu6AgU29SUM9r9oOKOWidXMncUgp2ixXQmWmRX8cWO6IlRKxAm+k5lABao6pGg6HQCMaolXKbxH+CaJP9naX/wOLieaNjSPDTAAAAABJRU5ErkJggg=="> FedoraCoin</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li id="singlewallet" class="active"><a href="#">Single Wallet</a></li>
+						<li id="paperwallet"><a href="#">Paper Wallet</a></li>
+						<li id="bulkwallet"><a href="#">Bulk Wallet</a></li>
+						<li id="brainwallet"><a href="#">Brain Wallet</a></li>
+						<li id="detailwallet"><a href="#">Wallet Details</a></li>
+					</ul>
+					<p class="navbar-right" id="quotecontainer"><span id="quote"></span></p>
+				</div>
+			</div>
+		</div>
+		
+		<div id="culturemenu">
+			<span><a href="?culture=en" id="cultureen" class="selected">English</a></span> | 
+			<span><a href="?culture=es" id="culturees">Español</a></span> | 
+			<span><a href="?culture=fr" id="culturefr">Français</a></span> | 
+			<span><a href="?culture=el" id="cultureel">ελληνικά</a></span> | 
+			<span><a href="?culture=it" id="cultureit">italiano</a></span> | 
+			<span><a href="?culture=de" id="culturede">Deutsch</a></span>
+		</div>
+		
+		<div id="seedpoolarea"><textarea rows="8" cols="62" id="seedpool"></textarea></div>
+		<div id="testnet"></div>
+		
+		<div id="generate" class="container">
+			<span id="generatelabelbitcoinaddress">Generating Fedoracoin Address...</span><br />
+			<span id="generatelabelmovemouse">MOVE your mouse around to add some extra randomness...</span><br />
+		</div>
+
+		<div id="wallets" class="container">
+			<div id="singlearea" class="walletarea">
+				<div class="commands">
+					<form id="singlecommands" class="form-inline" role="form">
+						<div class="form-group">
+							<input type="button" class="btn btn-default" id="newaddress" value="Generate New Address" onclick="ninja.wallets.singlewallet.generateNewAddressAndKey();" />
+						</div>
+						<div class="form-group pull-right">
+							<input type="button" class="btn btn-default" name="print" value="Print" id="singleprint" onclick="window.print();" /></span>
+						</div>
+					</form>
+				</div>
+				<div id="keyarea" class="keyarea">
+					<div class="public">
+						<div class="pubaddress">
+							<span  id="singlelabelbitcoinaddress">Fedoracoin Address</span>
+						</div>
+						<div id="qrcode_public" class="qrcode_public"></div>
+						<div class="pubaddress">
+							<span class="output" id="btcaddress"></span>
+						</div>
+						<div id="singleshare">SHARE</div>
+					</div>
+					<div class="private">
+						<div class="privwif">
+							<span  id="singlelabelprivatekey">Private Key (Wallet Import Format)</span>
+						</div>
+						<div id="qrcode_private" class="qrcode_private"></div>
+						<div class="privwif">
+							<span class="output" id="btcprivwif"></span>
+						</div>
+						<div id="singlesecret">SECRET</div>
+					</div>				
+				</div>
+				
+				<div id="singlesafety">
+					<p id="singletip1"><b>A Fedoracoin wallet</b> is as simple as a single pairing of a Fedoracoin address with its corresponding Fedoracoin private key. Such a wallet has been generated for you in your web browser and is displayed above.</p>
+					<p id="singletip2"><b>To safeguard this wallet</b> you must print or otherwise record the Fedoracoin address and private key. It is important to make a backup copy of the private key and store it in a safe location. This site does not have knowledge of your private key. If you are familiar with PGP you can download this all-in-one HTML page and check that you have an authentic version from the author of this site by matching the SHA1 hash of this HTML with the SHA1 hash available in the signed version history document linked on the footer of this site. If you leave/refresh the site or press the "Generate New Address" button then a new private key will be generated and the previously displayed private key will not be retrievable.	Your Fedoracoin private key should be kept a secret. Whomever you share the private key with has access to spend all the bitcoins associated with that address. If you print your wallet then store it in a zip lock bag to keep it safe from water. Treat a paper wallet like cash.</p>
+					<p id="singletip3"><b>Add funds</b> to this wallet by instructing others to send bitcoins to your Fedoracoin address.</p>
+					<p id="singletip4"><b>Check your balance</b> by going to blockchain.info or blockexplorer.com and entering your Fedoracoin address.</p>
+					<p id="singletip5"><b>Spend your bitcoins</b> by going to blockchain.info or mtgox.com and sweep the full balance of your private key into your account at their website. You can also spend your funds by downloading one of the popular bitcoin p2p clients and importing your private key to the p2p client wallet. Keep in mind when you import your single key to a bitcoin p2p client and spend funds your key will be bundled with other private keys in the p2p client wallet. When you perform a transaction your change will be sent to another bitcoin address within the p2p client wallet. You must then backup the p2p client wallet and keep it safe as your remaining bitcoins will be stored there. Satoshi advised that one should never delete a wallet.</p>
+				</div>
+			</div>
+
+			<div id="paperarea">
+				<div class="commands">
+					<form id="papercommands" class="form-inline" role="form">
+						<div class="form-group">
+							<label id="paperlabelhideart" class="control-label">Hide Art? </label>
+							<input type="checkbox" id="paperart" onchange="ninja.wallets.paperwallet.toggleArt(this);"/>
+						</div>
+						
+						<div class="form-group">
+							<label id="paperlabeladdressestogenerate" class="control-label">Addresses to generate: </label>
+							<input type="text" id="paperlimit" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+							<input class="btn btn-default" type="button" id="papergenerate" value="Generate" onclick="ninja.wallets.paperwallet.build(document.getElementById('paperlimit').value * 1, document.getElementById('paperlimitperpage').value * 1, !document.getElementById('paperart').checked, document.getElementById('paperpassphrase').value);" />
+						</div>
+						
+						<div class="form-group pull-right">
+							<input class="btn btn-default" type="button" name="print" value="Print" id="paperprint" onclick="window.print();" />
+						</div>
+					</form>
+					
+					<form id="paperadvancedcommands" class="form-inline extra" role="form">
+						<div class="form-group">
+							<label id="paperlabelencrypt" class="control-label">BIP38 Encrypt? </label>
+							<input type="checkbox" id="paperencrypt" onchange="ninja.wallets.paperwallet.toggleEncrypt(this);" />
+						</div>
+						
+						<div class="form-group">
+							<label id="paperlabelBIPpassphrase" class="control-label">Passphrase: </label>
+							<input type="text" id="paperpassphrase" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+							<label id="paperlabeladdressestogenerate" class="control-label">Addresses per page: </label>
+							<input type="text" id="paperlimitperpage" class="form-control" />
+						</div>
+					</form>
+				</div>
+				<div id="paperkeyarea"></div>
+			</div>
+			
+			<div id="bulkarea" class="walletarea">
+				<div class="commands">
+					<form id="bulkcommands" class="form-inline" role="form">
+						<div class="form-group">
+							<label id="bulklabelstartindex" class="control-label">Start index: </label>
+							<input type="text" id="bulkstartindex" value="1" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+							<label id="bulklabelrowstogenerate" class="control-label">Rows to generate: </label>
+							<input type="text"  id="bulklimit" value="3" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+							<label id="bulklabelcompressed" class="control-label">Compressed addresses? </label>
+							<input type="checkbox" id="bulkcompressed" />
+						</div>
+						
+						<div class="form-group">
+							<input type="button" class="btn btn-default" id="bulkgenerate" value="Generate" onclick="ninja.wallets.bulkwallet.buildCSV(document.getElementById('bulklimit').value * 1, document.getElementById('bulkstartindex').value * 1, document.getElementById('bulkcompressed').checked);" />
+						</div>
+						
+						<div class="form-group pull-right">
+							<input type="button" class="btn btn-default" name="print" id="bulkprint" value="Print" onclick="window.print();" />
+						</div>
+					</form>
+				</div>
+				<div class="body">
+					<span  id="bulklabelcsv">Comma Separated Values:</span> <span class="format" id="bulklabelformat">Index,Address,Private Key (WIF)</span>
+					<textarea rows="20" cols="88" id="bulktextarea" class="form-control"></textarea>
+				</div>
+				<div class="faqs">
+					<div id="bulkfaq1" class="faq"> 
+						<div id="bulkq1" class="question" onclick="ninja.wallets.bulkwallet.openCloseFaq(1);">
+							<span id="bulklabelq1">Why should I use a Bulk Wallet to accept bitcoins on my website?</span>
+							<div id="bulke1" class="more"></div>
+						</div>
+						<div id="bulka1" class="answer">The traditional approach to accepting bitcoins on your website requires that you install the official bitcoin client daemon ("bitcoind"). Many website hosting packages don't support installing the bitcoin daemon. Also, running the bitcoin daemon on your web server means your private keys are hosted on the server and could get stolen if your web server is hacked. When using a Bulk Wallet you can upload only the bitcoin addresses and not the private keys to your web server. Then you don't have to worry about your bitcoin wallet being stolen if your web server is hacked. </div>
+					</div>
+					<div id="bulkfaq2" class="faq"> 
+						<div id="bulkq2" class="question" onclick="ninja.wallets.bulkwallet.openCloseFaq(2);">
+							<span id="bulklabelq2">How do I use a Bulk Wallet to accept bitcoins on my website?</span>
+							<div id="bulke2" class="more"></div>
+						</div>
+						<div id="bulka2" class="answer">
+							<ol>
+							<li id="bulklabela2li1">Use the Bulk Wallet tab to pre-generate a large number of bitcoin addresses (10,000+). Copy and paste the generated comma separated values (CSV) list to a secure text file on your computer. Backup the file you just created to a secure location.</li>
+							<li id="bulklabela2li2">Import the bitcoin addresses into a database table on your web server. (Don't put the wallet/private keys on your web server, otherwise you risk hackers stealing your coins. Just the bitcoin addresses as they will be shown to customers.)</li>
+							<li id="bulklabela2li3">Provide an option on your website's shopping cart for your customer to pay in Fedoracoin. When the customer chooses to pay in Fedoracoin you will then display one of the addresses from your database to the customer as his "payment address" and save it with his shopping cart order.</li>
+							<li id="bulklabela2li4">You now need to be notified when the payment arrives. Google "bitcoin payment notification" and subscribe to at least one bitcoin payment notification service. There are various services that will notify you via Web Services, API, SMS, Email, etc. Once you receive this notification, which could be programmatically automated, you can process the customer's order. To manually check if a payment has arrived you can use Block Explorer. Replace THEADDRESSGOESHERE with the bitcoin address you are checking. It could take between 10 minutes to one hour for the transaction to be confirmed.<br />http://www.blockexplorer.com/address/THEADDRESSGOESHERE<br /><br />Unconfirmed transactions can be viewed at: http://blockchain.info/ <br />You should see the transaction there within 30 seconds.</li>
+							<li id="bulklabela2li5">Fedoracoins will safely pile up on the block chain. Use the original wallet file you generated in step 1 to spend them.</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="brainarea" class="walletarea">
+				<div id="braincommands" class="commands">
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<label class="control-label" id="brainlabelenterpassphrase">Enter Passphrase: </label>
+							<input tabindex="1" type="password" id="brainpassphrase" class="form-control" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.brainwallet.view();" />
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label" id="brainlabelshow">Show? </label>
+							<input type="checkbox" id="brainpassphraseshow" onchange="ninja.wallets.brainwallet.showToggle(this);" />
+						</div>
+						
+						<div class="form-group pull-right">
+							<input type="button" class="btn btn-default" name="print" id="brainprint" value="Print" onclick="window.print();" />
+						</div>
+					</form>
+					
+					<form class="form-inline extra" role="form">
+						<div class="form-group">
+							<label class="control-label" id="brainlabelconfirm">Confirm Passphrase: </label>
+							<input tabindex="2" type="password" id="brainpassphraseconfirm" class="form-control" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.brainwallet.view();" />
+						</div>
+						
+						<div class="form-group">
+							<input tabindex="3" type="button" id="brainview" class="btn btn-default" value="View" onclick="ninja.wallets.brainwallet.view();" />
+						</div>
+						
+						<div class="form-group pull-right">
+							<span id="brainalgorithm" class="notes right">Algorithm: SHA256(passphrase)</span>
+						</div>
+					</form>
+					<div class="row extra"><span id="brainwarning"></span></div>
+				</div>
+				<div id="brainkeyarea" class="keyarea">
+					<div class="public">
+						<div id="brainqrcodepublic" class="qrcode_public"></div>
+						<div class="pubaddress">
+							<span  id="brainlabelbitcoinaddress">Fedoracoin Address:</span>
+							<span class="output" id="brainbtcaddress"></span>
+						</div>
+					</div>
+					<div class="private">
+						<div id="brainqrcodeprivate" class="qrcode_private"></div>
+						<div class="privwif">
+							<span  id="brainlabelprivatekey">Private Key (Wallet Import Format):</span>
+							<span class="output" id="brainbtcprivwif"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="detailarea" class="walletarea">	
+				<div id="detailcommands" class="commands">
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<label class="control-label" id="detaillabelenterprivatekey">Enter Private Key: </label>
+							<input class="form-control" type="text" id="detailprivkey" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.detailwallet.viewDetails();" />
+						</div>
+						
+						<div class="form-group">
+							<input class="btn btn-default" type="button" id="detailview" value="View Details" onclick="ninja.wallets.detailwallet.viewDetails();" />
+						</div>
+						
+						<div class="form-group pull-right">
+							<input type="button" class="btn btn-default" name="print" id="brainprint" value="Print" onclick="window.print();" />
+						</div>
+					</form>
+					
+					<div class="row extra">
+						<span><label id="detailkeyformats">Key Formats: WIF, WIFC, HEX, B64, B6, MINI, BIP38</label></span>
+					</div>
+					<div id="detailbip38commands">
+						<span><label id="detaillabelpassphrase">Enter BIP38 Passphrase</label> <input type="text" id="detailprivkeypassphrase" value="" onfocus="this.select();" onkeypress="if (event.keyCode == 13) ninja.wallets.detailwallet.viewDetails();" /></span>
+						<span><input type="button" id="detaildecrypt" value="Decrypt BIP38" onclick="ninja.wallets.detailwallet.viewDetails();" /></span>
+					</div>
+				</div>
+				<div id="detailkeyarea">
+					<div class="notes">
+						<span id="detaillabelnote1">Your Fedoracoin Private Key is a unique secret number that only you know. It can be encoded in a number of different formats. Below we show the Fedoracoin Address and Public Key that corresponds to your Private Key as well as your Private Key in the most popular encoding formats (WIF, WIFC, HEX, B64, MINI).</span>
+						<br /><br />
+						<span id="detaillabelnote2">Fedoracoin v0.6+ stores public keys in compressed format. The client now also supports import and export of private keys with importprivkey/dumpprivkey. The format of the exported private key is determined by whether the address was generated in an old or new wallet.</span>
+					</div>
+					<div class="pubqr">
+						<div class="item">
+							<span  id="detaillabelbitcoinaddress">Fedoracoin Address</span>
+							<div id="detailqrcodepublic" class="qrcode_public"></div>
+							<span class="output" id="detailaddress"></span>
+						</div>					
+						<div class="item right">
+							<span  id="detaillabelbitcoinaddresscomp">Fedoracoin Address Compressed</span>
+							<div id="detailqrcodepubliccomp" class="qrcode_public"></div>
+							<span class="output" id="detailaddresscomp"></span>
+						</div>
+					</div>
+					<br /><br />
+					<div class="item clear">
+						<span  id="detaillabelpublickey">Public Key (130 characters [0-9A-F]):</span>
+						<span class="output pubkeyhex" id="detailpubkey"></span>
+					</div>
+					<div class="item">
+						<span  id="detaillabelpublickeycomp">Public Key (compressed, 66 characters [0-9A-F]):</span>
+						<span class="output" id="detailpubkeycomp"></span>
+					</div>
+					<hr />
+					<div class="privqr">
+						<div class="item">
+							<span ><span id="detaillabelprivwif">Private Key WIF<br />51 characters base58, starts with a</span> <span id="detailwifprefix">'5'</span></span>
+							<div id="detailqrcodeprivate" class="qrcode_private"></div>
+							<span class="output" id="detailprivwif"></span>
+						</div>
+						<div class="item right">
+							<span ><span id="detaillabelprivwifcomp">Private Key WIF Compressed<br />52 characters base58, starts with a</span> <span id="detailcompwifprefix">'K' or 'L'</span></span>
+							<div id="detailqrcodeprivatecomp" class="qrcode_private"></div>
+							<span class="output" id="detailprivwifcomp"></span>
+						</div>
+					</div>
+					<br /><br />
+					<div class="item clear">
+						<span  id="detaillabelprivhex">Private Key Hexadecimal Format (64 characters [0-9A-F]):</span>
+						<span class="output" id="detailprivhex"></span>
+					</div>
+					<div class="item">
+						<span  id="detaillabelprivb64">Private Key Base64 (44 characters):</span>
+						<span class="output" id="detailprivb64"></span>
+					</div>
+					<div class="item" style="display: none;" id="detailmini">
+						<span  id="detaillabelprivmini">Private Key Mini Format (22, 26 or 30 characters, starts with an 'S'):</span>
+						<span class="output" id="detailprivmini"></span>
+					</div>
+					<div class="item" style="display: none;" id="detailb6">
+						<span  id="detaillabelprivb6">Private Key Base6 Format (99 characters [0-5]):</span>
+						<span class="output" id="detailprivb6"></span>
+					</div>
+					<div class="item" style="display: none;" id="detailbip38">
+						<span  id="detaillabelprivbip38">Private Key BIP38 Format (58 characters base58, starts with '6P'):</span>
+						<span class="output" id="detailprivbip38"></span>
+					</div>
+				</div>
+				<div class="faqs">
+					<div id="detailfaq1" class="faq"> 
+						<div id="detailq1" class="question" onclick="ninja.wallets.detailwallet.openCloseFaq(1);">
+							<span id="detaillabelq1">How do I make a wallet using dice? What is B6?</span>
+							<div id="detaile1" class="more"></div>
+						</div>
+						<div id="detaila1" class="answer">An important part of creating a Fedoracoin wallet is ensuring the random numbers used to create the wallet are truly random. Physical randomness is better than computer generated pseudo-randomness. The easiest way to generate physical randomness is with dice. To create a Fedoracoin private key you only need one six sided die which you roll 99 times. Stopping each time to record the value of the die. When recording the values follow these rules: 1=1, 2=2, 3=3, 4=4, 5=5, 6=0. By doing this you are recording the big random number, your private key, in B6 or base 6 format. You can then enter the 99 character base 6 private key into the text field above and click View Details. You will then see the Fedoracoin address associated with your private key. You should also make note of your private key in WIF format since it is more widely used.</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+//jquery.min.js
+	</script>
+<script type="text/javascript">
+//bootstrap.min.js
+	</script>
+	<script type="text/javascript">
+//ninja.key.js
+	</script>
+	<script type="text/javascript">
+//ninja.misc.js
+	</script>
+	<script type="text/javascript">
+//ninja.translator.js
+	</script>
+	<script type="text/javascript">
+//ninja.singlewallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.paperwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.bulkwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.brainwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.detailwallet.js
+	</script>
+	<script type="text/javascript">
+//ninja.unittests.js
+	</script>
+	<script type="text/javascript">
+//ninja.onload.js
+	</script>
+	<script type="text/javascript">
+//tabsetup.js
+	</script>
+</body>
+</html>
